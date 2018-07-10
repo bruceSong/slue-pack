@@ -41,29 +41,29 @@ module.exports = function(config) {
         fse.copySync(utils.imgCacheDir, `${config.output}/images`);
     });
 
-    // if (config.watch === true) {
-    //     let allFile = [];
-    //     for (let appKey in originMap) {
-    //         allFile = allFile.concat(Object.keys(originMap[appKey].handledFile));
-    //     }
+    if (config.watch === true) {
+        let allFile = [];
+        for (let appKey in originMap) {
+            allFile = allFile.concat(Object.keys(originMap[appKey].handledFile));
+        }
 
-    //     let watcher = slueFs.watch(allFile);
-    //     watcher.on('change', function(filePath, stat) {
-    //         if (!utils.isCssFile(path.extname(filePath))) {
-    //             let _config = xtend({}, config);
-    //             _config.entry = {
-    //                 watcherFile: filePath
-    //             };
-    //             let data = getFilesMap(_config, modulesMap);
-    //             let _groupMap = data.groupMap;
-    //             let _originMap = data.originMap;
-    //             //console.log(_groupMap, _originMap);
-    //             getStream(_groupMap, modulesMap).then(function(stream) {
-    //                 return main(stream, modulesMap, _config);
-    //             }).then(function(data) {
-    //                 console.log(data);
-    //             });
-    //         }
-    //     });
-    // }
+        let watcher = slueFs.watch(allFile);
+        watcher.on('change', function(filePath, stat) {
+            if (!utils.isCssFile(path.extname(filePath))) {
+                let _config = xtend({}, config);
+                _config.entry = {
+                    watcherFile: filePath
+                };
+                let data = getFilesMap(_config, modulesMap);
+                let _groupMap = data.groupMap;
+                let _originMap = data.originMap;
+
+                getStream(_groupMap, modulesMap).then(function(stream) {
+                    return main(stream, modulesMap, _config);
+                }).then(function(data) {
+                    console.log(data);
+                });
+            }
+        });
+    }
 };

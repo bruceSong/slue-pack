@@ -102,7 +102,7 @@
 
 
 
-        //require('./app1'); 
+        require('/Users/songgenlei/workspace/selfwork/development/slue-pack/test/app1.js');
     },
 
     '/Users/songgenlei/workspace/selfwork/development/slue-pack/test/ddd.js': function(require, exports, module) {
@@ -115,6 +115,12 @@
         module.exports = function() {
             console.log(123);
             console.log(111);
+        }
+    },
+
+    '/Users/songgenlei/workspace/selfwork/development/slue-pack/test/app1.js': function(require, exports, module) {
+        module.exports = function() {
+            console.log('app1');
         }
     }
 });
