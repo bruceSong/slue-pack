@@ -1,11 +1,23 @@
 {
     "name": "slue-pack",
     "version": "1.0.5",
-    "description": "",
+    "description": "web pack",
     "main": "index.js",
     "scripts": {
         "test": "node ./test/test.js"
     },
+    "keywords": [
+        "web",
+        "require",
+        "import",
+        "pack",
+        "module",
+        "js",
+        "jsx",
+        "css",
+        "less",
+        "html"
+    ],
     "author": "471665225@qq.com",
     "license": "ISC",
     "dependencies": {
