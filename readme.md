@@ -1,4 +1,4 @@
-# slue-fs
+# slue-pack
 
 web打包工具，适用基于commonJs规范及es6规范的项目。
 
