@@ -26,8 +26,8 @@ module.exports = function(config) {
 
     //console.log(originMap.app.handledFile);
     
-    getStream(groupMap, modulesMap).then(function(stream) {
-        let mainInstance = new Main(stream, modulesMap, config);
+    getStream(groupMap, modulesMap).then(function(data) {
+        let mainInstance = new Main(data);
         mainInstance.on('ok', function(data) {
             savePacks(config, originMap);
         });
@@ -50,22 +50,22 @@ module.exports = function(config) {
                 let _groupMap = data.groupMap;
                 let _originMap = data.originMap;
 
-                getStream(_groupMap, modulesMap).then(function(stream) {
-                    let mainInstance = new Main(stream, modulesMap, config);
+                for (let appKey in originMap) {
+                    let _handledFile = _originMap.watcherFile.handledFile;
+                    for (let _filePath in _handledFile) {
+                        if (originMap[appKey].handledFile[_filePath]) {
+                            originMap[appKey].handledFile[_filePath] = _handledFile[_filePath];
+                        }
+                    }
+                }
+
+                getStream(_groupMap, modulesMap).then(function(data) {
+                    let mainInstance = new Main(data);
                     mainInstance.on('ok', function(data) {
-                        
+                        savePacks(config, originMap);
                     });
-                })
+                });
             }
         });
     }
 };
-
-// function savePacks(config, handledFile) {
-//     for (let appKey in config.entry) {
-//         let theHandledFile = handledFile[config.entry[appKey]];
-//         if (theHandledFile instanceof Array) {
-            
-//         }
-//     }
-// }
