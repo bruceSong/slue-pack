@@ -3,15 +3,11 @@ const path = require('path')
 const sluePack = require('../index');
 const slueStream = require('slue-stream');
 
-const theTestPlugin = slueStream.transformObj(function(file, evn, cb) {
-    //console.log(`the file path is '${file.path}'`);
-    cb(null, file);
-});
-
-const theSeconePlugin = slueStream.transformObj(function(file, evn, cb) {
-    //console.log(`the file contents is '${file.contents.toString()}'`);
-    cb(null, file);
-});
+const getOnePlugin = function() {
+    return slueStream.transformObj(function(file, env, cb) {
+        cb(null, file);
+    });
+}
 
 sluePack({
     externals: {
@@ -19,11 +15,7 @@ sluePack({
     },
     plugins: [{
         exts: ['.js'],
-        use: [theTestPlugin, theSeconePlugin]
+        use: [getOnePlugin, getOnePlugin]
     }],
     output: path.resolve(__dirname, './build/pkg')
-})
-// .pipe(slueStream.transformObj(function(file, env, cb) {
-//     console.log(file.path);
-//     cb(null, file);
-// }));
+});

@@ -7,8 +7,8 @@ const getConfig = require('./config');
 const utils = require('./lib/utils');
 const getFilesMap = require('./lib/getFilesMap');
 const getStream = require('./lib/getStream');
-const saveJsPack = require('./lib/saveJsPack');
-const main = require('./lib/main');
+const savePacks = require('./lib/savePacks');
+const Main = require('./lib/main');
 
 let config = {};
 let modulesMap = {};
@@ -24,21 +24,13 @@ module.exports = function(config) {
         originMap
     } = getFilesMap(config, modulesMap);
 
+    //console.log(originMap.app.handledFile);
+    
     getStream(groupMap, modulesMap).then(function(stream) {
-        return main(stream, modulesMap, config);
-    }).then(function(data) {
-        fse.mkdirsSync(`${config.output}/js`);
-        fse.mkdirsSync(`${config.output}/css`);
-
-        let jsPackSrc = saveJsPack(data.jsPackMap, config);
-
-        if (data.cssFileList.length) {
-            let cssPackSrc = `${config.output}/css/app.css`;
-            fs.writeFileSync(cssPackSrc, data.cssFileList.join(''));
-            jsPackSrc.push(cssPackSrc);
-        }
-
-        fse.copySync(utils.imgCacheDir, `${config.output}/images`);
+        let mainInstance = new Main(stream, modulesMap, config);
+        mainInstance.on('ok', function(data) {
+            savePacks(config, originMap);
+        });
     });
 
     if (config.watch === true) {
@@ -59,11 +51,21 @@ module.exports = function(config) {
                 let _originMap = data.originMap;
 
                 getStream(_groupMap, modulesMap).then(function(stream) {
-                    return main(stream, modulesMap, _config);
-                }).then(function(data) {
-                    console.log(data);
-                });
+                    let mainInstance = new Main(stream, modulesMap, config);
+                    mainInstance.on('ok', function(data) {
+                        
+                    });
+                })
             }
         });
     }
 };
+
+// function savePacks(config, handledFile) {
+//     for (let appKey in config.entry) {
+//         let theHandledFile = handledFile[config.entry[appKey]];
+//         if (theHandledFile instanceof Array) {
+            
+//         }
+//     }
+// }
